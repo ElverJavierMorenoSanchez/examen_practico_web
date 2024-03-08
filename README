@@ -1,0 +1,25 @@
+# EXAMEN PRACTICO
+
+# EJECUACION BACKEND
+El backend fue realizado con tecnologías como nodejs, express, prisma, cors, helmet, etc. 
+
+## Installation
+1. Navegar al directorio: `cd backend`
+2. Cambiar la cadena de conexión en el archivo .env `DATABASE_URL="mysql://user:pass@localhost:3306/database"`
+3. Instalar las dependencias: `npm install`
+4. Migrar los modelos a la base de datos: `npx prisma migrate deploy`
+5. Actualizar los modelos de prisma: `npx prisma generate`
+6. Correr la aplicación: `npm run dev`
+
+# EJECUACION FRONTEND
+El front fue realizado con tecnologias como Nextjs, tailwind, axios,
+
+## Installation
+1. Navegar al directorio: `cd frontend`
+2. Instalar las dependencias: `npm install`
+3. Correr la aplicación en modo desarrollo: `npm run dev`
+### (En caso de quere una mejor experiencia)
+4. Hacer el build de la aplicación: `npm run build`
+5. Iniciar la aplicación: `npm start`
+
+

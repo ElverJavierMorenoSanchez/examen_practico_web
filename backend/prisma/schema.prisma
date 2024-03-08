@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model alumnos {
+  id               Int                @id @default(autoincrement())
+  cedula           String?            @db.VarChar(10)
+  nombre           String?            @db.VarChar(50)
+  apellidos        String?            @db.VarChar(100)
+  grupo            String?            @db.Char(1)
+  alumnosexamenes  alumnosexamenes[]
+  alumnospracticas alumnospracticas[]
+}
+
+model alumnosexamenes {
+  alumno_id        Int
+  examen_id        Int
+  nota             Int?
+  alumnos          alumnos          @relation(fields: [alumno_id], references: [id], onUpdate: Restrict, map: "alumnosexamenes_ibfk_1")
+  examenesteoricos examenesteoricos @relation(fields: [examen_id], references: [id], onUpdate: Restrict, map: "alumnosexamenes_ibfk_2")
+
+  @@id([alumno_id, examen_id])
+  @@index([examen_id], map: "examen_id")
+}
+
+model alumnospracticas {
+  alumno_id   Int
+  practica_id Int
+  fecha       DateTime? @db.Date
+  nota        Int?
+  alumnos     alumnos   @relation(fields: [alumno_id], references: [id], onUpdate: Restrict, map: "alumnospracticas_ibfk_1")
+  practicas   practicas @relation(fields: [practica_id], references: [id], onUpdate: Restrict, map: "alumnospracticas_ibfk_2")
+
+  @@id([alumno_id, practica_id])
+  @@index([practica_id], map: "practica_id")
+}
+
+model examenesteoricos {
+  id                 Int                  @id
+  titulo             String?              @db.VarChar(100)
+  numPreguntas       Int?
+  fecha              DateTime?            @db.Date
+  alumnosexamenes    alumnosexamenes[]
+  profesoresexamenes profesoresexamenes[]
+}
+
+model practicas {
+  id                  Int                   @id
+  titulo              String?               @db.VarChar(100)
+  dificultad          String?               @db.VarChar(10)
+  alumnospracticas    alumnospracticas[]
+  profesorespracticas profesorespracticas[]
+}
+
+model profesores {
+  id                  Int                   @id
+  cedula              String?               @db.VarChar(10)
+  nombre              String?               @db.VarChar(50)
+  apellidos           String?               @db.VarChar(100)
+  profesoresexamenes  profesoresexamenes[]
+  profesorespracticas profesorespracticas[]
+}
+
+model profesoresexamenes {
+  profesor_id      Int
+  examen_id        Int
+  profesores       profesores       @relation(fields: [profesor_id], references: [id], onUpdate: Restrict, map: "profesoresexamenes_ibfk_1")
+  examenesteoricos examenesteoricos @relation(fields: [examen_id], references: [id], onUpdate: Restrict, map: "profesoresexamenes_ibfk_2")
+
+  @@id([profesor_id, examen_id])
+  @@index([examen_id], map: "examen_id")
+}
+
+model profesorespracticas {
+  profesor_id Int
+  practica_id Int
+  fecha       DateTime?  @db.Date
+  profesores  profesores @relation(fields: [profesor_id], references: [id], onUpdate: Restrict, map: "profesorespracticas_ibfk_1")
+  practicas   practicas  @relation(fields: [practica_id], references: [id], onUpdate: Restrict, map: "profesorespracticas_ibfk_2")
+
+  @@id([profesor_id, practica_id])
+  @@index([practica_id], map: "practica_id")
+}
